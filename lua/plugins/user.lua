@@ -2,6 +2,9 @@
 -- PLEASE REMOVE THE EXAMPLES YOU HAVE NO INTEREST IN BEFORE ENABLING THIS FILE
 -- Here are some examples:
 
+local is_personal = vim.env.NVIM_ENV == "personal"
+---
+---
 ---@type LazySpec
 return {
 
@@ -14,12 +17,48 @@ return {
     config = function() require("lsp_signature").setup() end,
   },
 
-  -- Inline code-completion using Amazon Q
+  -- Inline code-completion using Amazon Q, if not on my personal computer
   -- Make sure to sign in with ":AmazonQ login" first
   {
     "awslabs/amazonq.nvim",
+    enabled = not is_personal,
     opts = {
       ssoStartUrl = "https://amzn.awsapps.com/start",
+    },
+  },
+
+  -- Inline code-completion using GitHub Copilot on my personal computer
+  {
+    "zbirenbaum/copilot.lua",
+    enabled = is_personal,
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    event = "BufReadPost",
+    opts = {
+      suggestion = {
+        auto_trigger = true,
+        keymap = {
+          accept = false, -- handled by completion engine
+        },
+      },
+    },
+    specs = {
+      {
+        "AstroNvim/astrocore",
+        opts = {
+          options = {
+            g = {
+              -- set the ai_accept function
+              ai_accept = function()
+                if require("copilot.suggestion").is_visible() then
+                  require("copilot.suggestion").accept()
+                  return true
+                end
+              end,
+            },
+          },
+        },
+      },
     },
   },
 
@@ -105,7 +144,9 @@ return {
           split = { width = math.floor(vim.o.columns * 0.3) },
         },
         tools = {
-          kiro = { cmd = { "kiro-cli", "chat", "--trust-all-tools" } },
+          [is_personal and "gemini" or "kiro"] = {
+            cmd = is_personal and { "gemini" } or { "kiro-cli", "chat", "--trust-all-tools" },
+          },
         },
       },
     },
@@ -118,7 +159,7 @@ return {
       },
       {
         "<leader>aa",
-        function() require("sidekick.cli").toggle { name = "kiro", focus = true } end,
+        function() require("sidekick.cli").toggle { name = is_personal and "gemini" or "kiro", focus = true } end,
         desc = "Sidekick Toggle Kiro",
       },
       {
