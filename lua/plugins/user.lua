@@ -145,7 +145,7 @@ return {
         },
         tools = {
           [is_personal and "gemini" or "kiro"] = {
-            cmd = is_personal and { "gemini" } or { "kiro-cli", "chat", "--trust-all-tools" },
+            cmd = is_personal and { "gemini", "--yolo", "--no-status" } or { "kiro-cli", "chat", "--trust-all-tools" },
           },
         },
       },
