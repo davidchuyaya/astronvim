@@ -14,57 +14,6 @@ return {
     config = function() require("lsp_signature").setup() end,
   },
 
-  -- Chat using kiro
-  {
-    "olimorris/codecompanion.nvim",
-    version = "^18.0.0",
-    opts = {
-      adapters = {
-        kiro = function()
-          return require("codecompanion.adapters").extend("kiro", {
-            commands = {
-              default = {
-                "kiro-cli",
-                "acp",
-                "--trust-all-tools",
-              },
-            },
-          })
-        end,
-      },
-      display = {
-        chat = {
-          window = {
-            width = 0.3,
-          },
-          auto_scroll = true,
-        },
-      },
-      interactions = {
-        chat = {
-          adapter = "kiro",
-          keymaps = {
-            send = {
-              modes = { n = "<D-CR>", i = "<D-CR>" },
-              opts = {},
-            },
-          },
-          tools = {
-            ["cmd_runner"] = {
-              opts = {
-                allowed_in_yolo_mode = true,
-              },
-            },
-          },
-        },
-      },
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
-  },
-
   -- Inline code-completion using Amazon Q
   -- Make sure to sign in with ":AmazonQ login" first
   {
@@ -129,5 +78,82 @@ return {
   {
     "windwp/nvim-autopairs",
     enabled = false,
+  },
+
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = {
+      on_attach = function(bufnr)
+        local gs = require "gitsigns"
+        local map = function(mode, l, r, desc) vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc }) end
+        map("n", "]h", gs.next_hunk, "Next hunk")
+        map("n", "[h", gs.prev_hunk, "Prev hunk")
+        map("n", "<leader>gp", gs.preview_hunk, "Preview hunk")
+        map("n", "<leader>gr", gs.reset_hunk, "Reset hunk")
+        map("n", "<leader>gR", gs.reset_buffer, "Reset buffer")
+        map("n", "<leader>gd", gs.diffthis, "Diff this")
+      end,
+    },
+  },
+
+  {
+    "folke/sidekick.nvim",
+    opts = {
+      nes = { enabled = false },
+      cli = {
+        win = {
+          split = { width = math.floor(vim.o.columns * 0.3) },
+        },
+        tools = {
+          kiro = { cmd = { "kiro-cli", "chat", "--trust-all-tools" } },
+        },
+      },
+    },
+    keys = {
+      {
+        "<c-.>",
+        function() require("sidekick.cli").toggle() end,
+        desc = "Sidekick Toggle",
+        mode = { "n", "t", "i", "x" },
+      },
+      {
+        "<leader>aa",
+        function() require("sidekick.cli").toggle { name = "kiro", focus = true } end,
+        desc = "Sidekick Toggle Kiro",
+      },
+      {
+        "<leader>as",
+        function() require("sidekick.cli").select() end,
+        desc = "Select CLI",
+      },
+      {
+        "<leader>ad",
+        function() require("sidekick.cli").close() end,
+        desc = "Detach CLI Session",
+      },
+      {
+        "<leader>at",
+        function() require("sidekick.cli").send { msg = "{this}" } end,
+        mode = { "x", "n" },
+        desc = "Send This",
+      },
+      {
+        "<leader>af",
+        function() require("sidekick.cli").send { msg = "Current file: {file}" } end,
+        desc = "Send File",
+      },
+      {
+        "<leader>av",
+        function() require("sidekick.cli").send { msg = "{selection}" } end,
+        mode = { "x" },
+        desc = "Send Visual Selection",
+      },
+      {
+        "<leader>ap",
+        function() require("sidekick.cli").prompt() end,
+        mode = { "n", "x" },
+        desc = "Sidekick Select Prompt",
+      },
+    },
   },
 }

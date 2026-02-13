@@ -78,12 +78,6 @@ return {
           desc = "Split terminal",
         },
 
-        -- Toggle Kiro chat
-        ["<Leader>a"] = {
-          "<cmd>CodeCompanionChat Toggle<cr>",
-          desc = "Toggle Kiro chat",
-        },
-
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         -- ["<Leader>b"] = { desc = "Buffers" },
