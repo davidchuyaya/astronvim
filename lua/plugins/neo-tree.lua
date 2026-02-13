@@ -4,6 +4,8 @@ return {
     window = {
       mappings = {
         nowait = false,
+        ["e"] = "expand_all_subnodes",
+        ["E"] = "expand_all_nodes",
       },
     },
   },
