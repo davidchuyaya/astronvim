@@ -74,7 +74,7 @@ return {
         -- Create a horizontally split terminal
         ["<Leader>t2"] = {
           "<cmd>2ToggleTerm direction=horizontal<cr>",
-          desc = "Split terminal"
+          desc = "Split terminal",
         },
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
