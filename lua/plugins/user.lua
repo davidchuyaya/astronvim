@@ -19,11 +19,35 @@ return {
 
   -- Inline code-completion using Amazon Q, if not on my personal computer
   -- Make sure to sign in with ":AmazonQ login" first
+  -- Ghost text is handled by amazonq-ghost.lua (not blink.cmp)
   {
     "awslabs/amazonq.nvim",
     enabled = not is_personal,
     opts = {
       ssoStartUrl = "https://amzn.awsapps.com/start",
+      inline_suggest = false, -- disable LSP shim so blink stays fast
+    },
+    config = function(_, opts)
+      require("amazonq").setup(opts)
+      require("amazonq-ghost").setup()
+    end,
+    specs = {
+      {
+        "AstroNvim/astrocore",
+        opts = {
+          options = {
+            g = {
+              ai_accept = function()
+                local ghost = require("amazonq-ghost")
+                if ghost.is_visible() then
+                  ghost.accept()
+                  return true
+                end
+              end,
+            },
+          },
+        },
+      },
     },
   },
 
@@ -115,6 +139,15 @@ return {
   },
 
   {
+    "saghen/blink.cmp",
+    opts = {
+      keymap = {
+        ["<D-CR>"] = { "select_and_accept" },
+      },
+    },
+  },
+
+  {
     "windwp/nvim-autopairs",
     enabled = false,
   },
@@ -174,7 +207,7 @@ return {
       },
       {
         "<leader>at",
-        function() require("sidekick.cli").send { msg = "{this}" } end,
+        function() require("sidekick.cli").send { msg = "Current line: {this}" } end,
         mode = { "x", "n" },
         desc = "Send This",
       },
@@ -185,7 +218,7 @@ return {
       },
       {
         "<leader>av",
-        function() require("sidekick.cli").send { msg = "{selection}" } end,
+        function() require("sidekick.cli").send { msg = "Current selection: {selection}" } end,
         mode = { "x" },
         desc = "Send Visual Selection",
       },

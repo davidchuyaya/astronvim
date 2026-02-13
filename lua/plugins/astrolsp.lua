@@ -10,7 +10,7 @@ return {
   opts = {
     -- Configuration table of features provided by AstroLSP
     features = {
-      codelens = true, -- enable/disable codelens refresh on start
+      codelens = false, -- disable: causes extra RA requests + "content modified" errors
       inlay_hints = false, -- enable/disable inlay hints on start
       semantic_tokens = true, -- enable/disable semantic token highlighting
     },
@@ -18,22 +18,13 @@ return {
     formatting = {
       -- control auto formatting on save
       format_on_save = {
-        enabled = true, -- enable or disable format on save globally
-        allow_filetypes = { -- enable format on save for specified filetypes only
-          -- "go",
-        },
-        ignore_filetypes = { -- disable format on save for specified filetypes
-          -- "python",
-        },
+        enabled = false, -- disabled: handled by custom autocmd with undojoin below
       },
       disabled = { -- disable formatting capabilities for the listed language servers
         -- disable lua_ls formatting capability if you want to use StyLua to format your lua code
         -- "lua_ls",
       },
       timeout_ms = 1000, -- default format timeout
-      -- filter = function(client) -- fully override the default formatting function
-      --   return true
-      -- end
     },
     -- enable servers that you already have installed without mason
     servers = {
@@ -42,7 +33,16 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      rust_analyzer = {
+        settings = {
+          ["rust-analyzer"] = {
+            diagnostics = { disabled = { "inactive-code" } },
+            checkOnSave = true,
+            check = { command = "clippy" },
+            cargo = { allTargets = false },
+          },
+        },
+      },
     },
     -- customize how language servers are attached
     handlers = {
@@ -56,6 +56,8 @@ return {
     -- Configure buffer local auto commands to add when attaching a language server
     autocmds = {
       -- first key is the `augroup` to add the auto commands to (:h augroup)
+      -- lsp_format_on_save disabled
+      lsp_format_on_save = {},
       lsp_codelens_refresh = {
         -- Optional condition to create/delete auto command group
         -- can either be a string of a client capability or a function of `fun(client, bufnr): boolean`

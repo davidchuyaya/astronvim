@@ -4,7 +4,7 @@
 --       as this provides autocomplete and documentation while editing
 
 ---@type LazySpec
-return {
+local spec = {
   "AstroNvim/astrocore",
   ---@type AstroCoreOpts
   opts = {
@@ -21,6 +21,7 @@ return {
     diagnostics = {
       virtual_text = true,
       underline = true,
+      float = { wrap = true },
     },
     -- passed to `vim.filetype.add`
     filetypes = {
@@ -59,8 +60,8 @@ return {
         -- second key is the lefthand side of the map
 
         -- navigate buffer tabs
-        ["]b"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-        ["[b"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+        ["<D-M-Right>"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
+        ["<D-M-Left>"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
@@ -82,20 +83,28 @@ return {
         -- this is useful for naming menus
         -- ["<Leader>b"] = { desc = "Buffers" },
 
-        -- Cmd+number to jump to buffer by position
-        ["<D-1>"] = { function() require("astrocore.buffer").nav_to(1) end, desc = "Buffer 1" },
-        ["<D-2>"] = { function() require("astrocore.buffer").nav_to(2) end, desc = "Buffer 2" },
-        ["<D-3>"] = { function() require("astrocore.buffer").nav_to(3) end, desc = "Buffer 3" },
-        ["<D-4>"] = { function() require("astrocore.buffer").nav_to(4) end, desc = "Buffer 4" },
-        ["<D-5>"] = { function() require("astrocore.buffer").nav_to(5) end, desc = "Buffer 5" },
-        ["<D-6>"] = { function() require("astrocore.buffer").nav_to(6) end, desc = "Buffer 6" },
-        ["<D-7>"] = { function() require("astrocore.buffer").nav_to(7) end, desc = "Buffer 7" },
-        ["<D-8>"] = { function() require("astrocore.buffer").nav_to(8) end, desc = "Buffer 8" },
-        ["<D-9>"] = { function() require("astrocore.buffer").nav_to(9) end, desc = "Buffer 9" },
-
         -- setting a mapping to false will disable it
         -- ["<C-S>"] = false,
+      },
+      i = {},
+      t = {
+        ["<Esc>"] = { "<C-\\><C-n>", desc = "Exit terminal mode" },
       },
     },
   },
 }
+
+-- Cmd+number to jump to buffer by position in all modes
+for i = 1, 9 do
+  local key = ("<D-%d>"):format(i)
+  local desc = ("Buffer %d"):format(i)
+  local nav = function()
+    vim.cmd "stopinsert"
+    require("astrocore.buffer").nav_to(i)
+  end
+  for _, mode in ipairs { "n", "i", "t" } do
+    spec.opts.mappings[mode][key] = { nav, desc = desc }
+  end
+end
+
+return spec
