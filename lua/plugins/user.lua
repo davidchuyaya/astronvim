@@ -19,9 +19,33 @@ return {
     "olimorris/codecompanion.nvim",
     version = "^18.0.0",
     opts = {
+      adapters = {
+        kiro = function()
+          return require("codecompanion.adapters").extend("kiro", {
+            schema = {
+              model = {
+                default = "claude-sonnet-4.5",
+              },
+            },
+          })
+        end,
+      },
+      display = {
+        chat = {
+          window = {
+            width = 0.3,
+          },
+        },
+      },
       interactions = {
         chat = {
           adapter = "kiro",
+          keymaps = {
+            send = {
+              modes = { n = "<D-CR>", i = "<D-CR>" },
+              opts = {},
+            },
+          },
         },
       },
     },
