@@ -43,6 +43,7 @@ return {
         spell = false, -- sets vim.opt.spell
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = true, -- sets vim.opt.wrap
+        scrolloff = 30, -- sets vim.opt.scrolloff so we never hit the bottom of the screen
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -86,6 +87,17 @@ return {
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         -- ["<Leader>b"] = { desc = "Buffers" },
+
+        -- Cmd+number to jump to buffer by position
+        ["<D-1>"] = { function() require("astrocore.buffer").nav_to(1) end, desc = "Buffer 1" },
+        ["<D-2>"] = { function() require("astrocore.buffer").nav_to(2) end, desc = "Buffer 2" },
+        ["<D-3>"] = { function() require("astrocore.buffer").nav_to(3) end, desc = "Buffer 3" },
+        ["<D-4>"] = { function() require("astrocore.buffer").nav_to(4) end, desc = "Buffer 4" },
+        ["<D-5>"] = { function() require("astrocore.buffer").nav_to(5) end, desc = "Buffer 5" },
+        ["<D-6>"] = { function() require("astrocore.buffer").nav_to(6) end, desc = "Buffer 6" },
+        ["<D-7>"] = { function() require("astrocore.buffer").nav_to(7) end, desc = "Buffer 7" },
+        ["<D-8>"] = { function() require("astrocore.buffer").nav_to(8) end, desc = "Buffer 8" },
+        ["<D-9>"] = { function() require("astrocore.buffer").nav_to(9) end, desc = "Buffer 9" },
 
         -- setting a mapping to false will disable it
         -- ["<C-S>"] = false,

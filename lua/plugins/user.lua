@@ -22,9 +22,11 @@ return {
       adapters = {
         kiro = function()
           return require("codecompanion.adapters").extend("kiro", {
-            schema = {
-              model = {
-                default = "claude-sonnet-4.5",
+            commands = {
+              default = {
+                "kiro-cli",
+                "acp",
+                "--trust-all-tools",
               },
             },
           })
@@ -35,6 +37,7 @@ return {
           window = {
             width = 0.3,
           },
+          auto_scroll = true,
         },
       },
       interactions = {
@@ -44,6 +47,13 @@ return {
             send = {
               modes = { n = "<D-CR>", i = "<D-CR>" },
               opts = {},
+            },
+          },
+          tools = {
+            ["cmd_runner"] = {
+              opts = {
+                allowed_in_yolo_mode = true,
+              },
             },
           },
         },
@@ -60,9 +70,15 @@ return {
   {
     "awslabs/amazonq.nvim",
     opts = {
-      ssoStartUrl = "https://view.awsapps.com/start",
+      ssoStartUrl = "https://amzn.awsapps.com/start",
     },
   },
+
+  -- Autosave
+  {
+    "pocco81/auto-save.nvim",
+  },
+
   -- == Examples of Overriding Plugins ==
 
   -- customize dashboard options
@@ -86,6 +102,13 @@ return {
           }, "\n"),
         },
       },
+    },
+  },
+
+  {
+    "akinsho/toggleterm.nvim",
+    opts = {
+      size = 50,
     },
   },
 
