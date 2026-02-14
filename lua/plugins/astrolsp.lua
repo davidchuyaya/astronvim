@@ -40,6 +40,7 @@ return {
             checkOnSave = true,
             check = { command = "clippy" },
             cargo = { allTargets = false },
+            server = { extraEnv = { RA_LOG = "error" } },
           },
         },
       },

@@ -38,7 +38,7 @@ return {
           options = {
             g = {
               ai_accept = function()
-                local ghost = require("amazonq-ghost")
+                local ghost = require "amazonq-ghost"
                 if ghost.is_visible() then
                   ghost.accept()
                   return true
@@ -84,11 +84,6 @@ return {
         },
       },
     },
-  },
-
-  -- Autosave
-  {
-    "pocco81/auto-save.nvim",
   },
 
   -- == Examples of Overriding Plugins ==
@@ -145,6 +140,10 @@ return {
         ["<D-CR>"] = { "select_and_accept" },
       },
     },
+  },
+
+  {
+    "pocco81/auto-save.nvim",
   },
 
   {

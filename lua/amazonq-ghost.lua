@@ -6,6 +6,7 @@ local current_bufnr = nil
 local current_row = nil
 local current_col = nil
 local debounce_ms = 500
+local pending_request_id = nil
 
 local function get_client()
   local clients = vim.lsp.get_clients({ bufnr = 0, name = "amazonq" })
@@ -52,9 +53,19 @@ local function render(text, bufnr, row, col)
   current_col = col
 end
 
+local function cancel_pending()
+  if pending_request_id then
+    local client = get_client()
+    if client then client:cancel_request(pending_request_id) end
+    pending_request_id = nil
+  end
+end
+
 local function request_completion()
   local client = get_client()
   if not client then return end
+
+  cancel_pending()
 
   local bufnr = vim.api.nvim_get_current_buf()
   local cursor = vim.api.nvim_win_get_cursor(0)
@@ -64,9 +75,9 @@ local function request_completion()
   local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
   params.context = { triggerKind = vim.lsp.protocol.CompletionTriggerKind.Invoked }
 
-  client:request("aws/textDocument/inlineCompletionWithReferences", params, function(err, result)
+  local ok, req_id = client:request("aws/textDocument/inlineCompletionWithReferences", params, function(err, result)
+    pending_request_id = nil
     if err or not result or not result.items or #result.items == 0 then return end
-    -- Only render if cursor hasn't moved
     vim.schedule(function()
       local cur = vim.api.nvim_win_get_cursor(0)
       if cur[1] - 1 == row and cur[2] == col and vim.api.nvim_get_current_buf() == bufnr then
@@ -74,6 +85,7 @@ local function request_completion()
       end
     end)
   end, bufnr)
+  if ok then pending_request_id = req_id end
 end
 
 function M.is_visible()
@@ -111,6 +123,7 @@ function M.setup()
   vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI" }, {
     group = group,
     callback = function()
+      cancel_pending()
       clear()
       timer:stop()
       timer:start(debounce_ms, 0, vim.schedule_wrap(function()
@@ -123,6 +136,7 @@ function M.setup()
     group = group,
     callback = function()
       timer:stop()
+      cancel_pending()
       clear()
     end,
   })
