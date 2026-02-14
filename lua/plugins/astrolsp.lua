@@ -3,6 +3,8 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 
+local is_cloud_desktop = vim.env.NVIM_ENV == "cloud"
+
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
@@ -27,13 +29,15 @@ return {
       timeout_ms = 1000, -- default format timeout
     },
     -- enable servers that you already have installed without mason
-    servers = {
+    servers = not is_cloud_desktop and {
       -- "pyright"
-    },
+      "rust_analyzer",
+    } or {},
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
       rust_analyzer = {
+        cmd = is_cloud_desktop and { vim.fn.expand "~/.toolbox/bin/rust-analyzer" } or nil,
         settings = {
           ["rust-analyzer"] = {
             diagnostics = { disabled = { "inactive-code" } },

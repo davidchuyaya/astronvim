@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroUI provides the basis for configuring the AstroNvim User Interface
 -- Configuration documentation can be found with `:h astroui`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -34,6 +32,23 @@ return {
       LSPLoading8 = "⠧",
       LSPLoading9 = "⠇",
       LSPLoading10 = "⠏",
+    },
+    -- Fix: guard against nil bufnr in status providers (which-key redraw race)
+    status = {
+      setup = {
+        unique_path = {
+          buf_name = function(bufnr)
+            if type(bufnr) ~= "number" then return "" end
+            return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":t")
+          end,
+        },
+        filename = {
+          fname = function(bufnr)
+            if type(bufnr) ~= "number" then return "" end
+            return vim.api.nvim_buf_get_name(bufnr)
+          end,
+        },
+      },
     },
   },
 }

@@ -56,6 +56,9 @@ local spec = {
     -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
     mappings = {
       -- first key is the mode
+      t = {
+        ["<Esc>"] = { "<C-\\><C-n>", desc = "Enter normal mode" },
+      },
       n = {
         -- second key is the lefthand side of the map
 
@@ -87,9 +90,6 @@ local spec = {
         -- ["<C-S>"] = false,
       },
       i = {},
-      t = {
-        ["<Esc>"] = { "<C-\\><C-n>", desc = "Exit terminal mode" },
-      },
     },
   },
 }
