@@ -3,6 +3,7 @@
 -- Here are some examples:
 
 local is_personal = vim.env.NVIM_ENV == "personal"
+local is_internal = vim.env.NVIM_ENV == "internal"
 ---
 ---
 ---@type LazySpec
@@ -17,44 +18,10 @@ return {
     config = function() require("lsp_signature").setup() end,
   },
 
-  -- Inline code-completion using Amazon Q, if not on my personal computer
-  -- Make sure to sign in with ":AmazonQ login" first
-  -- Ghost text is handled by amazonq-ghost.lua (not blink.cmp)
-  {
-    "awslabs/amazonq.nvim",
-    enabled = not is_personal,
-    opts = {
-      ssoStartUrl = "https://amzn.awsapps.com/start",
-      inline_suggest = false, -- disable LSP shim so blink stays fast
-    },
-    config = function(_, opts)
-      require("amazonq").setup(opts)
-      require("amazonq-ghost").setup()
-    end,
-    specs = {
-      {
-        "AstroNvim/astrocore",
-        opts = {
-          options = {
-            g = {
-              ai_accept = function()
-                local ghost = require "amazonq-ghost"
-                if ghost.is_visible() then
-                  ghost.accept()
-                  return true
-                end
-              end,
-            },
-          },
-        },
-      },
-    },
-  },
-
-  -- Inline code-completion using GitHub Copilot on my personal computer
+  -- Inline code-completion using GitHub Copilot. Only for public repos
   {
     "zbirenbaum/copilot.lua",
-    enabled = is_personal,
+    enabled = not is_internal, -- Copilot is not allowed on internal repos
     cmd = "Copilot",
     build = ":Copilot auth",
     event = "BufReadPost",

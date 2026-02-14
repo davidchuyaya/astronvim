@@ -94,12 +94,24 @@ local spec = {
   },
 }
 
+-- Find a normal editor window (not terminal, file explorer, chat, etc.)
+local function focus_editor_win()
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].buftype == "" then
+      vim.api.nvim_set_current_win(win)
+      return
+    end
+  end
+end
+
 -- Cmd+number to jump to buffer by position in all modes
 for i = 1, 9 do
   local key = ("<D-%d>"):format(i)
   local desc = ("Buffer %d"):format(i)
   local nav = function()
     vim.cmd "stopinsert"
+    focus_editor_win()
     require("astrocore.buffer").nav_to(i)
   end
   for _, mode in ipairs { "n", "i", "t" } do
