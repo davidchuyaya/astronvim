@@ -3,7 +3,7 @@ return {
   opts = {
     window = {
       mappings = {
-        nowait = false,
+        ["<space>"] = false, -- let leader key pass through
         ["e"] = "expand_all_subnodes",
         ["E"] = "expand_all_nodes",
       },
