@@ -3,7 +3,7 @@
 -- Here are some examples:
 
 local is_personal = vim.env.NVIM_ENV == "personal"
-local is_internal = vim.env.NVIM_ENV == "internal"
+local is_internal = vim.env.NVIM_PRIVATE == "internal"
 ---
 ---
 ---@type LazySpec

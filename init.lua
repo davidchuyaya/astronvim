@@ -23,6 +23,10 @@ if not pcall(require, "lazy") then
   vim.cmd.quit()
 end
 
+-- Source project-local .nvim.lua early so env vars are available to plugin specs
+local exrc = vim.fn.getcwd() .. "/.nvim.lua"
+if vim.fn.filereadable(exrc) == 1 then vim.cmd.source(exrc) end
+
 require "lazy_setup"
 require "polish"
 
