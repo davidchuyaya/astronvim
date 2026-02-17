@@ -45,6 +45,7 @@ local spec = {
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = true, -- sets vim.opt.wrap
         scrolloff = 30, -- sets vim.opt.scrolloff so we never hit the bottom of the screen
+        foldcolumn = "0", -- disable up/down carets that take up space in the gutter
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -108,11 +109,13 @@ end
 -- Cmd+number to jump to buffer by position in all modes
 for i = 1, 9 do
   local key = ("<D-%d>"):format(i)
-  local desc = ("Buffer %d"):format(i)
+  local idx = i
+  local desc = i == 9 and "Last buffer" or ("Buffer %d"):format(i)
   local nav = function()
     vim.cmd "stopinsert"
     focus_editor_win()
-    require("astrocore.buffer").nav_to(i)
+    local bufs = vim.t.bufs or {}
+    require("astrocore.buffer").nav_to(idx == 9 and #bufs or idx)
   end
   for _, mode in ipairs { "n", "i", "t" } do
     spec.opts.mappings[mode][key] = { nav, desc = desc }
