@@ -142,6 +142,7 @@ return {
           split = { width = math.floor(vim.o.columns * 0.3) },
         },
         tools = {
+          amazon_q = { enabled = false },
           [is_personal and "gemini" or "kiro"] = {
             cmd = is_personal and { "gemini", "--yolo", "--no-status" } or { "kiro-cli", "chat", "--trust-all-tools" },
           },
@@ -150,7 +151,7 @@ return {
     },
     keys = {
       {
-        "<c-.>",
+        "<leader>at",
         function() require("sidekick.cli").toggle() end,
         desc = "Sidekick Toggle",
         mode = { "n", "t", "i", "x" },
@@ -171,10 +172,10 @@ return {
         desc = "Detach CLI Session",
       },
       {
-        "<leader>at",
+        "<leader>al",
         function() require("sidekick.cli").send { msg = "Current line: {this}" } end,
         mode = { "x", "n" },
-        desc = "Send This",
+        desc = "Send Line",
       },
       {
         "<leader>af",
