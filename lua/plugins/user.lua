@@ -11,12 +11,8 @@ return {
 
   -- == Examples of Adding Plugins ==
 
-  "andweeb/presence.nvim",
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "BufRead",
-    config = function() require("lsp_signature").setup() end,
-  },
+  { "andweeb/presence.nvim", enabled = false },
+  { "ray-x/lsp_signature.nvim", enabled = false },
 
   -- Inline code-completion using GitHub Copilot. Only for public repos
   {
@@ -111,6 +107,9 @@ return {
 
   {
     "pocco81/auto-save.nvim",
+    opts = {
+      debounce_delay = 1000,
+    },
   },
 
   {
