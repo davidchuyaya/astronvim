@@ -77,6 +77,9 @@ local spec = {
           desc = "Close buffer from tabline",
         },
 
+        -- Equalize split sizes
+        ["<Leader>h"] = { "<C-w>=", desc = "Equalize splits" },
+
         -- Create a horizontally split terminal
         ["<Leader>t2"] = {
           "<cmd>2ToggleTerm direction=horizontal<cr>",
@@ -105,6 +108,19 @@ local function focus_editor_win()
     end
   end
 end
+
+-- gf: if in a terminal buffer, open file in an editor window instead
+spec.opts.mappings.n["gf"] = {
+  function()
+    local file = vim.fn.expand "<cfile>"
+    if file == "" then return end
+    if vim.bo.buftype == "terminal" then
+      focus_editor_win()
+    end
+    vim.cmd("edit " .. vim.fn.fnameescape(file))
+  end,
+  desc = "Open file under cursor (editor window if terminal)",
+}
 
 -- Cmd+number to jump to buffer by position in all modes
 for i = 1, 9 do
