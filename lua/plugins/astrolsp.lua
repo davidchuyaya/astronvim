@@ -29,10 +29,7 @@ return {
       timeout_ms = 1000, -- default format timeout
     },
     -- enable servers that you already have installed without mason
-    servers = not is_cloud_desktop and {
-      -- "pyright"
-      "rust_analyzer",
-    } or {},
+    servers = is_cloud_desktop and { "rust_analyzer" } or {},
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
@@ -41,8 +38,7 @@ return {
         settings = {
           ["rust-analyzer"] = {
             diagnostics = { disabled = { "inactive-code" } },
-            checkOnSave = true,
-            check = { command = "clippy" },
+            checkOnSave = false,
             cargo = { allTargets = false },
             server = { extraEnv = { RA_LOG = "error" } },
           },
