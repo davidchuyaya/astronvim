@@ -46,6 +46,7 @@ local spec = {
         wrap = true, -- sets vim.opt.wrap
         scrolloff = 30, -- sets vim.opt.scrolloff so we never hit the bottom of the screen
         foldcolumn = "0", -- disable up/down carets that take up space in the gutter
+        autoread = true, -- automatically reload buffer to see changes
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
