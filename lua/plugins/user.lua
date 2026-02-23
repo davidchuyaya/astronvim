@@ -143,8 +143,8 @@ return {
         },
         tools = {
           amazon_q = { enabled = false },
-          [is_personal and "gemini" or "kiro"] = {
-            cmd = is_personal and { "gemini", "--yolo", "--no-status" } or { "kiro-cli", "chat", "--trust-all-tools" },
+          kiro = {
+            cmd = { "kiro-cli", "chat", "--trust-all-tools" },
           },
         },
       },
@@ -157,7 +157,7 @@ return {
       },
       {
         "<leader>aa",
-        function() require("sidekick.cli").toggle { name = is_personal and "gemini" or "kiro", focus = true } end,
+        function() require("sidekick.cli").toggle { name = is_personal and "copilot" or "kiro", focus = true } end,
         desc = "Sidekick Toggle Kiro",
       },
       {

@@ -29,7 +29,7 @@ return {
       timeout_ms = 1000, -- default format timeout
     },
     -- enable servers that you already have installed without mason
-    servers = is_cloud_desktop and { "rust_analyzer" } or {},
+    servers = { "rust_analyzer" },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
@@ -38,7 +38,7 @@ return {
         settings = {
           ["rust-analyzer"] = {
             diagnostics = { disabled = { "inactive-code" } },
-            checkOnSave = false,
+            checkOnSave = true,
             cargo = { allTargets = false },
             server = { extraEnv = { RA_LOG = "error" } },
           },
