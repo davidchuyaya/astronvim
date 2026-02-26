@@ -1,5 +1,8 @@
 return {
   "mrcjkb/rustaceanvim",
+  keys = {
+    { "<Leader>lt", function() vim.cmd.RustLsp("testables") end, desc = "Rust Testables" },
+  },
   opts = {
     tools = {
       -- Allow running tests with reserved bash characters (like <Type>)
