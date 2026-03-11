@@ -134,8 +134,10 @@ for i = 1, 9 do
     local bufs = vim.t.bufs or {}
     require("astrocore.buffer").nav_to(idx == 9 and #bufs or idx)
   end
+  local alt_key = ("<M-%d>"):format(i)
   for _, mode in ipairs { "n", "i", "t" } do
     spec.opts.mappings[mode][key] = { nav, desc = desc }
+    spec.opts.mappings[mode][alt_key] = { nav, desc = desc }
   end
 end
 
