@@ -100,7 +100,7 @@ return {
     "saghen/blink.cmp",
     opts = {
       keymap = {
-        ["<D-CR>"] = { "select_and_accept" },
+        ["<CR>"] = { "select_and_accept" },
       },
     },
   },

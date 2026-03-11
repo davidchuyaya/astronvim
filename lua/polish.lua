@@ -17,8 +17,8 @@ vim.g.clipboard = {
     ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
   },
   paste = {
-    ["+"] = function() return vim.fn.getreg("0") end,
-    ["*"] = function() return vim.fn.getreg("0") end,
+    ["+"] = function() return { vim.fn.getreg("0", 1, true), vim.fn.getregtype("0") } end,
+    ["*"] = function() return { vim.fn.getreg("0", 1, true), vim.fn.getregtype("0") } end,
   },
 }
 vim.opt.clipboard = "unnamedplus"
