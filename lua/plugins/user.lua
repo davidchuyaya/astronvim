@@ -142,9 +142,11 @@ return {
           split = { width = math.floor(vim.o.columns * 0.3) },
         },
         tools = {
-          amazon_q = { enabled = false },
           kiro = {
             cmd = { "kiro-cli", "chat", "--trust-all-tools" },
+          },
+          copilot = {
+            cmd = { "copilot", "--alt-screen" },
           },
         },
       },

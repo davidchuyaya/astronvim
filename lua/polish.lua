@@ -10,15 +10,16 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- OSC 52: yank to local clipboard over SSH
+local osc52 = require "vim.ui.clipboard.osc52"
 vim.g.clipboard = {
   name = "OSC 52",
   copy = {
-    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    ["+"] = osc52.copy "+",
+    ["*"] = osc52.copy "*",
   },
   paste = {
-    ["+"] = function() return { vim.fn.getreg("", 1, true), vim.fn.getregtype("") } end,
-    ["*"] = function() return { vim.fn.getreg("", 1, true), vim.fn.getregtype("") } end,
+    ["+"] = osc52.paste "+",
+    ["*"] = osc52.paste "*",
   },
 }
 vim.opt.clipboard = "unnamedplus"
