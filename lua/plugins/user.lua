@@ -146,7 +146,7 @@ return {
             cmd = { "kiro-cli", "chat", "--trust-all-tools" },
           },
           copilot = {
-            cmd = { "copilot", "--alt-screen" },
+            cmd = { "copilot", "--alt-screen", "--allow-all" },
           },
         },
       },
@@ -212,6 +212,19 @@ return {
         prompt_end = "%$ ",
         -- How to write lua patterns: https://www.lua.org/pil/20.2.html
       }
+    end,
+  },
+
+  {
+    "lervag/vimtex",
+    lazy = false, -- we don't want to lazy load VimTeX
+    -- tag = "v2.15", -- uncomment to pin to a specific release
+    init = function()
+      -- VimTeX configuration goes here, e.g.
+      vim.g.vimtex_view_method = "skim"
+      vim.g.vimtex_format_enabled = true
+      vim.g.vimtex_compiler_method = "tectonic"
+      vim.g.vimtex_compiler_silent = true
     end,
   },
 }
