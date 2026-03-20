@@ -101,6 +101,14 @@ return {
     opts = {
       keymap = {
         ["<CR>"] = { "select_and_accept", "fallback" },
+        ["<Tab>"] = {
+          function()
+            if vim.g.ai_accept and vim.g.ai_accept() then return true end
+          end,
+          "select_next",
+          "fallback",
+        },
+        ["<S-Tab>"] = { "select_prev", "fallback" },
       },
     },
   },
