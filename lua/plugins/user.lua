@@ -192,7 +192,7 @@ return {
       },
       {
         "<leader>av",
-        function() require("sidekick.cli").send { msg = "Current selection: {selection}" } end,
+        function() require("sidekick.cli").send { msg = "Current selection: {this} {selection}" } end,
         mode = { "x" },
         desc = "Send Visual Selection",
       },
