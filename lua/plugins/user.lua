@@ -13,6 +13,7 @@ return {
 
   { "andweeb/presence.nvim", enabled = false },
   { "ray-x/lsp_signature.nvim", enabled = false },
+  { "pteroctopus/faster.nvim" },
 
   -- Inline code-completion using GitHub Copilot. Only for public repos
   {
@@ -151,7 +152,7 @@ return {
         },
         tools = {
           kiro = {
-            cmd = { "kiro-cli", "chat", "--trust-all-tools" },
+            cmd = { "kiro-cli", "chat", "--trust-all-tools", "--classic" },
           },
           copilot = {
             cmd = { "copilot", "--alt-screen", "--allow-all" },
@@ -231,8 +232,6 @@ return {
       -- VimTeX configuration goes here, e.g.
       vim.g.vimtex_view_method = "skim"
       vim.g.vimtex_format_enabled = true
-      vim.g.vimtex_compiler_method = "tectonic"
-      vim.g.vimtex_compiler_silent = true
     end,
   },
 }
