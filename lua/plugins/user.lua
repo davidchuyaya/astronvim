@@ -151,6 +151,18 @@ return {
           split = { width = math.floor(vim.o.columns * 0.3) },
         },
         tools = {
+          gemini = {
+            cmd = { "agy", "--dangerously-skip-permissions" },
+          },
+          claude = {
+            cmd = { "claude", "--dangerously-skip-permissions" },
+          },
+          codex = {
+            cmd = { "codex", "--yolo" },
+          },
+          cursor = {
+            cmd = { "agent", "--yolo" },
+          },
           kiro = {
             cmd = { "kiro-cli", "chat", "--trust-all-tools", "--classic" },
           },
@@ -162,14 +174,9 @@ return {
     },
     keys = {
       {
-        "<leader>at",
+        "<leader>aa",
         function() require("sidekick.cli").toggle() end,
         desc = "Sidekick Toggle",
-      },
-      {
-        "<leader>aa",
-        function() require("sidekick.cli").toggle { name = is_personal and "copilot" or "kiro", focus = true } end,
-        desc = "Sidekick Toggle Kiro",
       },
       {
         "<leader>as",

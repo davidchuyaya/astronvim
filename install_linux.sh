@@ -1,8 +1,8 @@
 #!/bin/bash
 sudo apt-get update
 
-# Install ripgrep and neovim
-sudo apt-get install ripgrep neovim
+# Install necessary packages
+sudo apt-get install -y build-essentials unzip ripgrep neovim
 
 # Install node for toggleterminal
 # Download and install nvm:
