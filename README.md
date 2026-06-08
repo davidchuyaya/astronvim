@@ -3,12 +3,14 @@ My IDE and terminal settings.
 ## Install
 
 ```shell
-git clone https://github.com/<your_user>/<your_repository> ~/.config/nvim
+git clone https://github.com/davidchuyaya/astronvim ~/.config/nvim
 
-# On Mac, install dependencies like Node. Figure out the equivalents for linux
+# On Mac
 ./install_macos.sh
+# On Linux
+./install_linux.sh
 
-# Install kitty
+# Install kitty if this is the machine that will SSH into others
 # Then move the config
 cp kitty.conf ~/.config/kitty/kitty.conf
 
