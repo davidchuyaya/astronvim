@@ -9,6 +9,8 @@ git clone https://github.com/davidchuyaya/astronvim ~/.config/nvim
 ./install_macos.sh
 # On Linux
 ./install_linux.sh
+# On Amazon Linux 2023
+./install_amazon_linux.sh
 
 # Install kitty if this is the machine that will SSH into others
 # Then move the config

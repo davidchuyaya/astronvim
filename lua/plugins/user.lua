@@ -13,6 +13,22 @@ return {
 
   { "andweeb/presence.nvim", enabled = false },
   { "ray-x/lsp_signature.nvim", enabled = false },
+  { "stevearc/aerial.nvim", enabled = false },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    enabled = false,
+  },
+  {
+    "romus204/tree-sitter-manager.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    cmd = { "TSManager" }, -- Lazy load on this command
+    keys = {
+      { "<leader>tm", "<cmd>TSManager<cr>", desc = "Tree-sitter Manager" },
+    },
+    opts = {
+      -- Add any specific tree-sitter-manager configuration options here
+    },
+  },
   { "pteroctopus/faster.nvim" },
 
   -- Inline code-completion using GitHub Copilot. Only for public repos

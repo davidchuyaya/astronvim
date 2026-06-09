@@ -1,6 +1,5 @@
 #!/bin/bash
-# Install rg (grep)
-brew install ripgrep
+brew install ripgrep tree-sitter-cli
 
 # Install node for toggleterminal
 # Download and install nvm:
