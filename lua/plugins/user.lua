@@ -271,8 +271,8 @@ return {
         node_path = "/usr/local/bin/node",
         -- Edits already sync through OT; compile manually with <Leader>ob.
         compile_on_write = false,
-        -- Skim automatically reloads changed PDFs without losing the current page.
-        pdf_viewer = "skim",
+        -- Sioyek automatically reloads changed PDFs; install the macOS app separately.
+        pdf_viewer = { "open", "-a", "sioyek" },
         -- Give VimTeX/TexLab real project files, including refs.bib.
         sync_dir = "~/.overleaf",
         -- Reuse AstroNvim's explorer instead of the plugin's custom tree.
