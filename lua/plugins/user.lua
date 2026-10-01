@@ -249,6 +249,7 @@ return {
 
   {
     "lervag/vimtex",
+    enabled = false, -- Conflicts with overleaf.nvim
     lazy = false, -- we don't want to lazy load VimTeX
     -- tag = "v2.15", -- uncomment to pin to a specific release
     init = function()
@@ -256,5 +257,28 @@ return {
       vim.g.vimtex_view_method = "skim"
       vim.g.vimtex_format_enabled = true
     end,
+  },
+
+  {
+    "whonore/Coqtail", -- Coq support
+  },
+
+  {
+    "davidchuyaya/overleaf.nvim",
+    config = function()
+      require("overleaf").setup {
+        -- Keep authentication working when Neovim is launched without nvm's PATH.
+        node_path = "/usr/local/bin/node",
+        -- Edits already sync through OT; compile manually with <Leader>ob.
+        compile_on_write = false,
+        -- Skim automatically reloads changed PDFs without losing the current page.
+        pdf_viewer = "skim",
+        -- Give VimTeX/TexLab real project files, including refs.bib.
+        sync_dir = "~/.overleaf",
+        -- Reuse AstroNvim's explorer instead of the plugin's custom tree.
+        tree_provider = "neo-tree",
+      }
+    end,
+    build = "cd node && npm install",
   },
 }
