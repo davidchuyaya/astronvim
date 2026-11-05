@@ -4,10 +4,80 @@
 
 local is_personal = vim.env.NVIM_ENV == "personal"
 local is_internal = vim.env.NVIM_PRIVATE == "internal"
+
+local function enable_tex_spelling(buf)
+  if not vim.api.nvim_buf_is_valid(buf) then return end
+  local ft = vim.bo[buf].filetype
+  if ft ~= "tex" and ft ~= "plaintex" then return end
+  for _, win in ipairs(vim.fn.win_findbuf(buf)) do
+    vim.wo[win].spell = true
+  end
+end
 ---
 ---
 ---@type LazySpec
 return {
+
+  {
+    "AstroNvim/astrocore",
+    opts = {
+      options = {
+        opt = {
+          spellfile = vim.fn.stdpath("config") .. "/en.utf-8.add",
+        },
+        g = {
+          tex_comment_nospell = 1,
+        },
+      },
+      autocmds = {
+        tex_spelling = {
+          {
+            event = { "FileType", "Syntax" },
+            pattern = { "tex", "plaintex" },
+            desc = "Enable spell checking for TeX files",
+            callback = function(args)
+              -- Included files may contain prose outside standard section/document zones.
+              vim.schedule(function()
+                if vim.api.nvim_buf_is_valid(args.buf) then
+                  enable_tex_spelling(args.buf)
+                  vim.api.nvim_buf_call(args.buf, function()
+                    vim.cmd([[
+                      syntax spell toplevel
+                      syntax cluster texCommentGroup remove=@Spell add=@NoSpell
+                      silent! syntax clear texTikzNoSpell
+                      syntax region texTikzNoSpell keepend
+                        \ start=/\\begin\s*{\s*tikzpicture\s*}/
+                        \ skip=/\\%\|%.*$/
+                        \ end=/\\end\s*{\s*tikzpicture\s*}/
+                        \ contains=@NoSpell,texStatement,texSpecialChar,texLength,texComment,texBeginEnd
+                        \ containedin=ALLBUT,texComment,texZone,texTikzNoSpell
+                    ]])
+                  end)
+                end
+              end)
+            end,
+          },
+          {
+            event = { "BufWinEnter", "WinEnter" },
+            desc = "Enable spell checking when restored TeX buffers are displayed",
+            callback = function(args)
+              -- Session restoration can overwrite window options after this event.
+              vim.schedule(function() enable_tex_spelling(args.buf) end)
+            end,
+          },
+        },
+        terminal_spelling = {
+          {
+            event = { "TermOpen", "BufWinEnter", "WinEnter" },
+            desc = "Disable spell checking in terminal windows",
+            callback = function(args)
+              if vim.bo[args.buf].buftype == "terminal" then vim.wo.spell = false end
+            end,
+          },
+        },
+      },
+    },
+  },
 
   -- == Examples of Adding Plugins ==
 
@@ -67,6 +137,14 @@ return {
   },
 
   -- == Examples of Overriding Plugins ==
+
+  {
+    "rebelot/heirline.nvim",
+    opts = function(_, opts)
+      -- Hide the extra filename/breadcrumb row above each window.
+      opts.winbar = nil
+    end,
+  },
 
   -- customize dashboard options
   {
@@ -271,8 +349,8 @@ return {
         node_path = "/usr/local/bin/node",
         -- Edits already sync through OT; compile manually with <Leader>ob.
         compile_on_write = false,
-        -- Sioyek automatically reloads changed PDFs; install the macOS app separately.
-        pdf_viewer = { "open", "-a", "sioyek" },
+        -- Open Sioyek once; let its automatic reload handle subsequent compiles.
+        pdf_viewer = "sioyek",
         -- Give VimTeX/TexLab real project files, including refs.bib.
         sync_dir = "~/.overleaf",
         -- Reuse AstroNvim's explorer instead of the plugin's custom tree.
@@ -282,3 +360,4 @@ return {
     build = "cd node && npm install",
   },
 }
+
